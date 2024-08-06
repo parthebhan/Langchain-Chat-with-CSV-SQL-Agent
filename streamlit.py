@@ -54,7 +54,7 @@ def get_response(user_query: str, db: SQLDatabase, chat_history: list):
 
 st.set_page_config(page_title="CSV to SQLite and Query Interface", page_icon=":speech_balloon:")
 
-st.title("CSV Insight Bot: Chat with Your Data 💬📊")
+st.title("CSV ChatBot: Chat with Your Data 💬📊")
 
 with st.sidebar:
     st.subheader("This is a simple chat application using SQL Agent. .Upload CSV Files and Connect to the database and start chatting")
