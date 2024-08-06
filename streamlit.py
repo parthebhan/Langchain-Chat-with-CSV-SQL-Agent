@@ -111,7 +111,7 @@ with st.sidebar:
                 st.error(f"An unexpected error occurred while deleting the database file: {e}")
         if os.path.exists(temp_dir):
             delete_all_files_in_dir(temp_dir)
-        st.experimental_rerun()
+        st.rerun()
 
 # Display chat messages
 if "chat_history" in st.session_state:
