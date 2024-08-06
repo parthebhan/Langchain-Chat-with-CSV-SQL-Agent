@@ -93,7 +93,7 @@ with st.sidebar:
                 AIMessage(content="Hello! I'm a SQL assistant. Ask me anything about your database."),
             ]
             st.success("CSV files have been converted to SQLite database!")
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.warning("Please upload CSV files before saving.")
 
