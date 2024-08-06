@@ -54,35 +54,51 @@ def get_response(user_query: str, db: SQLDatabase, chat_history: list):
 
 st.set_page_config(page_title="CSV to SQLite and Query Interface", page_icon=":speech_balloon:")
 
-st.title("CSV to SQLite and Chat with SQL Agent")
+st.title("CSV ChatBot: Chat with Your Data 💬📊")
 
 with st.sidebar:
-    st.subheader("Upload CSV Files and Connect to the Database")
+    st.subheader("This is a simple chat application using SQL Agent. Upload CSV Files and Connect to the database and start chatting")
     uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
     
     if st.button("Save to SQLite"):
-        try:
-            if uploaded_files:
-                temp_dir = "temp_csv_files"
-                os.makedirs(temp_dir, exist_ok=True)
-                
-                for uploaded_file in uploaded_files:
-                    with open(os.path.join(temp_dir, uploaded_file.name), "wb") as f:
-                        f.write(uploaded_file.getbuffer())
-                
-                converter = CSVToSQLiteConverter(temp_dir, "student.sqlite")
-                converter.run_pipeline()
-                st.session_state.db = init_database("student.sqlite")
-                st.session_state.chat_history = [
-                    AIMessage(content="Hello! I'm a SQL assistant. Ask me anything about your database."),
-                ]
-                st.success("CSV files have been converted to SQLite database!")
-                
-            else:
-                st.warning("Please upload CSV files before saving.")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-            st.write(e)
+        if uploaded_files:
+            temp_dir = "temp_csv_files"
+            os.makedirs(temp_dir, exist_ok=True)
+            
+            for uploaded_file in uploaded_files:
+                with open(os.path.join(temp_dir, uploaded_file.name), "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+            
+            converter = CSVToSQLiteConverter(temp_dir, "student.sqlite")
+            converter.run_pipeline()
+            st.session_state.db = init_database("student.sqlite")
+            st.session_state.chat_history = [
+                AIMessage(content="Hello! I'm a SQL assistant. Ask me anything about your database."),
+            ]
+            st.success("CSV files have been converted to SQLite database!")
+            st.session_state.refresh_needed = True  # Custom flag to indicate a refresh
+        else:
+            st.warning("Please upload CSV files before saving.")
+
+    if st.button("Clear Chat and Delete All Files"):
+        if "chat_history" in st.session_state:
+            st.session_state.chat_history = []
+        if os.path.exists(db_path):
+            try:
+                st.session_state.db = None  # Ensure the database connection is closed
+                os.remove(db_path)
+                st.success("Database file deleted successfully.")
+            except PermissionError:
+                st.error("Unable to delete the database file. It may be in use by another process.")
+            except Exception as e:
+                st.error(f"An unexpected error occurred while deleting the database file: {e}")
+        if os.path.exists(temp_dir):
+            delete_all_files_in_dir(temp_dir)
+        st.experimental_rerun()
+
+if st.session_state.get("refresh_needed", False):
+    st.session_state.refresh_needed = False  # Reset flag
+    st.write("Data has been refreshed.")  # Trigger UI update
 
 if "chat_history" in st.session_state:
     for message in st.session_state.chat_history:
