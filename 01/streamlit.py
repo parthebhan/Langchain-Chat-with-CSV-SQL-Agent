@@ -54,35 +54,35 @@ def get_response(user_query: str, db: SQLDatabase, chat_history: list):
 
 st.set_page_config(page_title="CSV to SQLite and Query Interface", page_icon=":speech_balloon:")
 
-st.title("CSV Insight Bot: Chat with Your Data 💬📊")
+st.title("CSV to SQLite and Chat with SQL Agent")
 
 with st.sidebar:
-    st.subheader("This is a simple chat application using SQL Agent. .Upload CSV Files and Connect to the database and start chatting")
+    st.subheader("Upload CSV Files and Connect to the Database")
     uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
     
     if st.button("Save to SQLite"):
-        if uploaded_files:
-            temp_dir = "temp_csv_files"
-            os.makedirs(temp_dir, exist_ok=True)
-            
-            for uploaded_file in uploaded_files:
-                with open(os.path.join(temp_dir, uploaded_file.name), "wb") as f:
-                    f.write(uploaded_file.getbuffer())
-            
-            converter = CSVToSQLiteConverter(temp_dir, "student.sqlite")
-            converter.run_pipeline()
-            st.session_state.db = init_database("student.sqlite")
-            st.session_state.chat_history = [
-                AIMessage(content="Hello! I'm a SQL assistant. Ask me anything about your database."),
-            ]
-            st.success("CSV files have been converted to SQLite database!")
-            st.session_state.refresh_needed = True  # Custom flag to indicate a refresh
-        else:
-            st.warning("Please upload CSV files before saving.")
-
-if st.session_state.get("refresh_needed", False):
-    st.session_state.refresh_needed = False  # Reset flag
-    st.write("Data has been refreshed.")  # Trigger UI update
+        try:
+            if uploaded_files:
+                temp_dir = "temp_csv_files"
+                os.makedirs(temp_dir, exist_ok=True)
+                
+                for uploaded_file in uploaded_files:
+                    with open(os.path.join(temp_dir, uploaded_file.name), "wb") as f:
+                        f.write(uploaded_file.getbuffer())
+                
+                converter = CSVToSQLiteConverter(temp_dir, "student.sqlite")
+                converter.run_pipeline()
+                st.session_state.db = init_database("student.sqlite")
+                st.session_state.chat_history = [
+                    AIMessage(content="Hello! I'm a SQL assistant. Ask me anything about your database."),
+                ]
+                st.success("CSV files have been converted to SQLite database!")
+                
+            else:
+                st.warning("Please upload CSV files before saving.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            st.write(e)
 
 if "chat_history" in st.session_state:
     for message in st.session_state.chat_history:
