@@ -48,7 +48,7 @@ def init_database(db_path: str) -> SQLDatabase:
     return SQLDatabase.from_uri(db_uri)
 
 def get_response(user_query: str, db: SQLDatabase) -> str:
-    llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
+    llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0, groq_api_key=groq_api_key)
     agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=True)
     result = agent_executor.invoke({"input": user_query})
     return str(result['output'])
