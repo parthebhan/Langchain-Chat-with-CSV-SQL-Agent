@@ -68,7 +68,7 @@ def delete_all_files_in_dir(dir_path: str):
 # Streamlit App
 st.set_page_config(page_title="CSV to SQLite and Query Interface", page_icon=":speech_balloon:")
 
-st.title("CSV ChatBot: Chat with Your Data 💬📊")
+st.title("CSV ChatBot 💬📊")
 
 # Path to the SQLite database file and directory for CSV files
 db_path = "student.sqlite"
