@@ -85,7 +85,9 @@ temp_dir = "temp_csv_files"
 
 
 with st.sidebar:
-    st.subheader("This is a simple chat application using SQL Agent. Upload CSV Files and Connect to the database and start chatting")
+    st.subheader("This is a simple chat application using SQL Agent.")
+    st.write("")
+    st.subheader("Upload CSV Files and Connect to the database and start chatting")
     uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
     
     if st.button("Save to SQLite"):
