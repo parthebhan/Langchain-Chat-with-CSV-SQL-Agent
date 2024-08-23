@@ -1,6 +1,6 @@
 # **Chat Interface with AI Using SQL Agent**
 
-## `Complete CSV QA: From Upload to Database Storage and Querying`
+### `Complete CSV QA: From Upload to Database Storage and Querying`
 
 [![Streamlit App](https://img.shields.io/badge/Streamlit_App_-CSV_Chatbot-ff69b4.svg?style=for-the-badge&logo=Streamlit)](https://langchain-chat-with-csv-sql-agent-fgra9nwxng6utyytzzg692.streamlit.app/)
 ## Purpose
