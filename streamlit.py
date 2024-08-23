@@ -74,6 +74,7 @@ st.title("CSV ChatBot 💬📊")
 db_path = "student.sqlite"
 temp_dir = "temp_csv_files"
 
+
 with st.sidebar:
     st.subheader("This is a simple chat application using SQL Agent. Upload CSV Files and Connect to the database and start chatting")
     uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
@@ -133,6 +134,14 @@ if user_query and user_query.strip() != "":
         if 'db' in st.session_state and st.session_state.db:
             response = get_response(user_query, st.session_state.db)
             st.markdown(response)
+
+    
             st.session_state.chat_history.append(AIMessage(content=response))
         else:
             st.markdown("Please upload CSV files and convert them to the database first.")
+
+
+
+# Add the credit section
+st.sidebar.markdown("<hr>", unsafe_allow_html=True)  # Adds a horizontal line with HTML
+st.sidebar.markdown("<h3 style='color: #2ca02c;font-size: 20px;'>App Created by: Parthebhan Pari</h3>", unsafe_allow_html=True)
